@@ -8,4 +8,5 @@ Pacakge manager로는 pnpm을 사용할 것이고, 이후 Docker, Kubernetes를 
 ## Project Set-Up
 
 일단 NestJS CLI를 사용하기 위해 `npm i -g @nestjs/cli`를 진행하여 설치한다.  
-이후 `nest new \<project name>`을 진행하여 최초 project를 생성한다.
+CLI를 설치했으면 먼저 `nest new \<project name>`을 진행하여 최초 project를 생성한다.  
+이후 `nest generate library common` 명령어를 통해 모든 기능에 공통적으로 사용할 library를 셋팅한다.
