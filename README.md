@@ -10,7 +10,7 @@ Pacakge manager로는 pnpm을 사용할 것이고, 이후 Docker, Kubernetes를 
 일단 NestJS CLI를 사용하기 위해 `npm i -g @nestjs/cli`를 진행하여 설치한다.  
 CLI를 설치했으면 먼저 `nest new <project name>`을 진행하여 최초 project를 생성한다.
 
-## Library common
+## Common library의 databasae module과 config module
 
 Common library에서는 모든 모듈에서 공통적으로 사용할 기능을 구성할 계획이다.  
 먼저 `nest generate library common` 명령어를 통해 library를 생성한다.
@@ -82,3 +82,7 @@ Common library에서는 모든 모듈에서 공통적으로 사용할 기능을 
   3. 앞서 구성한 `ConfigModule`을 import해줌
   4. inject 옵션에 `ConfigService`를 넣어주어 의존성을 주입해줌
   5. useFactory 옵션을 이용하여 의존성 주입받은 `configService`에서 MONGODB_URI를 가져와서 uri값으로 전달해줌
+
+## Abstract schema & repository
+
+Abstract class를 이용하여 abstract schema와 abstract repository를 만들어두면 추후 다른 model로 확장할 때 용이하기에 만들어서 사용하였다.
