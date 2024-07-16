@@ -3,9 +3,11 @@ import { ReservationsModule } from './reservations.module';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
+import * as CookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(ReservationsModule);
+  app.use(CookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
