@@ -19,37 +19,42 @@ export class PaymentsService {
   );
 
   async createCharge({ card, amount, email }: PaymentsCreateChargeDto) {
-    const paymentMethod = await this.stripe.paymentMethods.create({
-      type: 'card',
-      card,
-    });
+    let paymentIntentsCreateObject: Stripe.PaymentIntentCreateParams | null =
+      null;
 
-    const paymentIntentsCreateObject: Stripe.PaymentIntentCreateParams =
-      this.configService.get('NODE_ENV') === 'development'
-        ? {
-            // payment_method: paymentMethod.id,
-            amount: amount * 100,
-            confirm: true,
-            // payment_method_types: ['card'],
-            currency: 'usd',
-            payment_method: 'pm_card_visa',
-            automatic_payment_methods: {
-              enabled: true,
-              allow_redirects: 'never',
-            },
-          }
-        : {
-            payment_method: paymentMethod.id,
-            amount: amount * 100,
-            confirm: true,
-            currency: 'usd',
-          };
+    if (this.configService.get('MODE') === 'development') {
+      paymentIntentsCreateObject = {
+        amount: amount * 100,
+        confirm: true,
+        currency: 'usd',
+        payment_method: 'pm_card_visa',
+        automatic_payment_methods: {
+          enabled: true,
+          allow_redirects: 'never',
+        },
+      };
+    } else {
+      const paymentMethod = await this.stripe.paymentMethods.create({
+        type: 'card',
+        card,
+      });
+
+      paymentIntentsCreateObject = {
+        payment_method: paymentMethod.id,
+        amount: amount * 100,
+        confirm: true,
+        currency: 'usd',
+      };
+    }
 
     const paymentIntent = await this.stripe.paymentIntents.create(
       paymentIntentsCreateObject,
     );
 
-    this.notificationsService.emit('notify_email', { email });
+    this.notificationsService.emit('notify_email', {
+      email,
+      text: `$${amount}의 결제가 정상적으로 완료되었습니다.`,
+    });
 
     return paymentIntent;
   }
