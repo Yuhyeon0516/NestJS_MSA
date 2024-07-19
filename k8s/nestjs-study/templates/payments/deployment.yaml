@@ -17,3 +17,19 @@ spec:
       containers:
         - image: asia-northeast3-docker.pkg.dev/nest-study-429711/payments/production
           name: payments
+          env:
+            - name: PORT
+              value: '3001'
+            - name: MODE
+              value: development
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe
+                  key: apiKey
+            - name: NOTIFICATIONS_PORT
+              value: '3000'
+            - name: NOTIFICATIONS_HOST
+              value: notifications
+          ports:
+            - containerPort: 3001
